@@ -2,24 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\MenuItem;
+use App\Models\Table;
 use Illuminate\Http\Request;
-use App\Models\Product;
 
 class CashierController extends Controller
 {
-   public function index(Request $request)
+    public function index()
     {
-        // Fetch all products for cashier view
-        $products = Product::orderBy('name')->get();
+        $orders = Order::with(['table', 'items.menuItem'])
+            ->whereDate('created_at', today())
+            ->whereIn('status', ['pending', 'in_kitchen', 'ready'])
+            ->latest()
+            ->get();
 
-        // Retrieve cart from session (or empty array)
-        $cartItems = session('cart', []);
+        $menuItems = MenuItem::where('is_available', true)->get();
+        $tables = Table::all();
 
-        // Compute total
-        $total = collect($cartItems)->sum(function ($item) {
-            return ($item['price'] ?? 0) * ($item['qty'] ?? 1);
-        });
+        return view('cashier.dashboard', compact('orders', 'menuItems', 'tables'));
+    }
 
-        return view('cashier.dashboard', compact('products', 'cartItems', 'total'));
+    public function getOrder($id)
+    {
+        $order = Order::with(['table', 'items.menuItem'])->findOrFail($id);
+        return response()->json($order);
+    }
+
+    public function getMenuItems(Request $request)
+    {
+        $category = $request->get('category');
+        
+        $query = MenuItem::where('is_available', true);
+        
+        if ($category && $category !== 'all') {
+            $query->where('category', $category);
+        }
+        
+        $items = $query->get();
+        
+        return response()->json($items);
     }
 }

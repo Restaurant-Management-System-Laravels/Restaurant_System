@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CashierController;
-
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TableController;
+use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\HelpController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,15 +41,47 @@ Route::middleware(['auth', 'approved'])->get('/user/dashboard', function () {
     return view('user.dashboard');
 })->name('user.dashboard');
 
+
+
 // 💰 Cashier dashboard
 Route::middleware(['auth', 'approved'])->get('/cashier/dashboard', function () {
     return view('cashier.dashboard');
 })->name('cashier.dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/cashier/dashboard', [CashierController::class, 'index'])
-        ->name('cashier.dashboard');
+    Route::get('/cashier/dashboard', [CashierController::class, 'index']) ->name('cashier.dashboard');
+    Route::get('/cashier/order/{id}', [CashierController::class, 'getOrder'])->name('cashier.order');
+    Route::get('/cashier/menu-items', [CashierController::class, 'getMenuItems'])->name('cashier.menu');
+
+    // Order Management
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/orders/{order}/pay', [OrderController::class, 'pay'])->name('orders.pay');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+
+
+    // Table Management
+    Route::resource('tables', TableController::class);
+
+    // Menu Items Management
+    Route::resource('menu-items', MenuItemController::class);
+
+    // Customer Management
+    Route::resource('customers', CustomerController::class);
+
+    // Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    // Help Center
+    Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 });
+
+
+
+
 
 
 // 🍳 Kitchen dashboard
