@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Cashier Dashboard - Tasty Station')
@@ -19,40 +20,30 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-2">
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-lg">
+            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-lg transition">
                 <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                 <span>Order Line</span>
             </a>
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+            <a href="{{ route('tables.index') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
                 <i data-lucide="utensils-crossed" class="w-5 h-5"></i>
                 <span>Manage Table</span>
             </a>
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+            <a href="{{ route('menu-items.index') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
                 <i data-lucide="coffee" class="w-5 h-5"></i>
                 <span>Manage Dishes</span>
             </a>
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
-                <i data-lucide="users" class="w-5 h-5"></i>
-                <span>Customers</span>
-            </a>
+            
         </nav>
 
         <div class="p-4 border-t border-gray-200 space-y-2">
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-                <span>Settings</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
-                <i data-lucide="help-circle" class="w-5 h-5"></i>
-                <span>Help Center</span>
-            </a>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
+            
+            <form method="POST" action="{{ route('logout') }}" class="inline w-full">
                 @csrf
-                <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition text-left">
                     <i data-lucide="log-out" class="w-5 h-5"></i>
                     <span>Logout</span>
                 </button>

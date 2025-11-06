@@ -4,22 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order #{{ $order->order_number }} - Print</title>
-    <style>
-        @media print {
-            body { margin: 0; padding: 20px; }
-            .no-print { display: none; }
-        }
-        body {
-            font-family: 'Courier New', monospace;
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h2 { text-align: center; margin: 10px 0; }
-        .line { border-top: 1px dashed #000; margin: 10px 0; }
-        .item { display: flex; justify-content: space-between; margin: 5px 0; }
-        .total { font-weight: bold; font-size: 1.2em; }
-    </style>
+    
 </head>
 <body>
     <h1>TASTY STATION</h1>

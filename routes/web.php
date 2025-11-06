@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/orders/{order}/pay', [OrderController::class, 'pay'])->name('orders.pay');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
-    Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+    Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
 
 
     // Table Management
@@ -68,16 +68,7 @@ Route::middleware(['auth'])->group(function () {
     // Menu Items Management
     Route::resource('menu-items', MenuItemController::class);
 
-    // Customer Management
-    Route::resource('customers', CustomerController::class);
-
-    // Settings
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
-
-    // Help Center
-    Route::get('/help', [HelpController::class, 'index'])->name('help.index');
-});
+    });
 
 
 
