@@ -7,6 +7,7 @@ use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,28 +49,33 @@ Route::middleware(['auth', 'approved'])->get('/cashier/dashboard', function () {
     return view('cashier.dashboard');
 })->name('cashier.dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/cashier/dashboard', [CashierController::class, 'index']) ->name('cashier.dashboard');
-    Route::get('/cashier/order/{id}', [CashierController::class, 'getOrder'])->name('cashier.order');
-    Route::get('/cashier/menu-items', [CashierController::class, 'getMenuItems'])->name('cashier.menu');
-
-    // Order Management
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
-    Route::post('/orders/{order}/pay', [OrderController::class, 'pay'])->name('orders.pay');
-    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
-    Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
-
-
-    // Table Management
-    Route::resource('tables', TableController::class);
-
-    // Menu Items Management
-    Route::resource('menu-items', MenuItemController::class);
-
-    });
-
+Route::prefix('cashier')->name('cashier.')->group(function () {
+    
+    // Main Dashboard
+    Route::get('/dashboard', [CashierController::class, 'dashboard'])->name('dashboard');
+    
+    
+    // Navigation Routes
+    Route::get('/orders', [CashierController::class, 'orders'])->name('orders');
+    Route::get('/order-details', [CashierController::class, 'orderDetails'])->name('order-details');
+    Route::get('/business-centre', [CashierController::class, 'businessCentre'])->name('business-centre');
+    Route::get('/day-closing', [CashierController::class, 'dayClosing'])->name('day-closing');
+    Route::get('/reservations', [CashierController::class, 'reservations'])->name('reservations');
+    Route::get('/reports', [CashierController::class, 'reports'])->name('reports');
+    Route::get('/about', [CashierController::class, 'about'])->name('about');
+    
+    // Cart Operations
+    Route::post('/add-to-cart', [CashierController::class, 'addToCart'])->name('add-to-cart');
+    Route::post('/increase-quantity/{index}', [CashierController::class, 'increaseQuantity'])->name('increase-quantity');
+    Route::post('/decrease-quantity/{index}', [CashierController::class, 'decreaseQuantity'])->name('decrease-quantity');
+    Route::delete('/remove-from-cart/{index}', [CashierController::class, 'removeFromCart'])->name('remove-from-cart');
+    Route::delete('/clear-cart', [CashierController::class, 'clearCart'])->name('clear-cart');
+    
+    // Order Creation
+    Route::post('/create-order', [CashierController::class, 'createOrder'])->name('create-order');
+    Route::get('/cashier/order-receipt/{id}', [CashierController::class, 'showReceipt'])
+    ->name('cashier.order-receipt');
+});
 
 
 
@@ -93,7 +99,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::middleware('role:cashier,kitchen')->group(function () {
-        Route::get('/cashier', [CashierController::class, 'index'])->name('cashier.dashboard');
+        Route::get('/cashier', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
     });
 });
 

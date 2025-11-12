@@ -15,6 +15,7 @@ class CreateTablesTable extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id')->unique();
             $table->string('table_number', 10)->unique();
             $table->integer('capacity')->default(4);
             $table->enum('status', ['available', 'occupied', 'reserved'])->default('available');

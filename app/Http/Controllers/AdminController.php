@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+
 class AdminController extends Controller
 {
     public function index()
@@ -13,7 +14,7 @@ class AdminController extends Controller
         $pendingUsers = User::where('is_approved', false)
                             ->where('role', '!=', 'admin')
                             ->get();
-
+        
         return view('admin.dashboard', compact('pendingUsers'));
     }
 

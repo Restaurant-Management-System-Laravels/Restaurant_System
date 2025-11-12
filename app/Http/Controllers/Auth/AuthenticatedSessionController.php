@@ -30,13 +30,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
-        
-        if (Auth::check() && !Auth::user()->is_approved) {
-    $role = Auth::user()->role;
-    Auth::logout();
-    return back()->with('status', ucfirst($role) . ' account is not yet approved by the admin.');
-}
-
     }
 
     /**

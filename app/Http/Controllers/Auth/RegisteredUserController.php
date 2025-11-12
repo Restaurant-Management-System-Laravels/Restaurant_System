@@ -28,33 +28,29 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-   public function store(Request $request)
-{
-    $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        'role' => ['required', 'in:customer,cashier,kitchen']
-    ]);
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|string|in:admin,cashier,kitchen,customer',
 
-    // Automatically approve customer, but not cashier/kitchen
-    $isApproved = $request->role === 'customer';
+        ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role,
-        'is_approved' => $isApproved
-    ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'is_approved' => true,
 
-    if ($isApproved) {
+        ]);
+
+        event(new Registered($user));
+
         Auth::login($user);
-        return redirect()->route('dashboard');
+
+        return redirect(RouteServiceProvider::HOME);
     }
-
-    // For cashier & kitchen, show pending approval message
-    return redirect()->route('login')->with('status', 'Your account is pending admin approval.');
-}
-
 }

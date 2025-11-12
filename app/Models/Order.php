@@ -10,25 +10,22 @@ class Order extends Model
 
     protected $fillable = [
         'order_number',
-        'table_id',
-        'user_id',
-        'number_of_people',
+        'guest_type',
+        'place',
+        'waiter',
+        'priority',
+        'table_number',
+        'pax',
         'subtotal',
+        'discount',
         'tax',
-        'donation',
         'total',
         'status',
-        'payment_method',
-        'paid_at'
+        'user_id',
+        'completed_at',
     ];
 
-    protected $casts = [
-        'subtotal' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'donation' => 'decimal:2',
-        'total' => 'decimal:2',
-        'paid_at' => 'datetime'
-    ];
+  
 
     public function table()
     {

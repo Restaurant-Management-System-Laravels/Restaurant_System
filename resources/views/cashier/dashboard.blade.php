@@ -1,424 +1,355 @@
-
 @extends('layouts.app')
 
-@section('title', 'Cashier Dashboard - Tasty Station')
-
 @section('content')
-<div x-data="cashierDashboard()" x-init="init()" class="flex h-screen bg-gray-50">
+<div class="flex h-screen bg-gray-50">
     <!-- Sidebar -->
-    <div class="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-                    <i data-lucide="coffee" class="w-5 h-5 text-white"></i>
+    <div class="w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <h1 class="text-3xl font-bold text-gray-800">Restra</h1>
+        </div>
+        
+        <nav class="mt-6">
+            <a href="{{ route('cashier.orders') }}" class="flex items-center px-6 py-3 text-purple-600 bg-purple-50 border-l-4 border-purple-600">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Orders
+            </a>
+            
+            <a href="{{ route('cashier.order-details') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Order Details
+            </a>
+            
+            <a href="{{ route('cashier.business-centre') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Business Centre
+            </a>
+            
+            <a href="{{ route('cashier.day-closing') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Day Closing
+            </a>
+            
+            <a href="{{ route('cashier.reservations') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Reservation's
+            </a>
+            
+            <a href="{{ route('cashier.dashboard') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Dashboard
+            </a>
+            
+            <a href="{{ route('cashier.reports') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Reports
+            </a>
+            
+            <a href="{{ route('cashier.about') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                About Us
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+        <div class="p-8">
+            <!-- Header Section -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Place</label>
+                        <select id="place-select" name="place" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="Take Away">Take Away</option>
+                            <option value="Dine In">Dine In</option>
+                            <option value="Delivery">Delivery</option>
+                        </select>
+                    </div>
+                
+                  <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Table No</label>
+                        <select id="table-select" name="table_no" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <option value="Tb10">Tb10</option>
+                            <option value="Tb11">Tb11</option>
+                            <option value="Tb12">Tb12</option>
+                        </select>
+                  </div> 
                 </div>
-                <div>
-                    <h1 class="text-lg font-bold text-gray-900">Tasty</h1>
-                    <p class="text-xs text-gray-500">Station</p>
+            </div>
+
+            <!-- Category Tabs -->
+           <div class="flex gap-4 mb-6">
+    <button onclick="filterCategory('all', this)" class="category-btn flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700 transition">
+        All Food
+        <span class="bg-white text-purple-600 px-2 py-1 rounded text-sm font-semibold">{{ $foodCount }}</span>
+    </button>
+
+    <button onclick="filterCategory('burger', this)" class="category-btn flex items-center gap-2 px-6 py-3 bg-white text-gray-700 rounded-lg shadow hover:bg-gray-50 transition">
+        Burger
+        <span class="text-gray-500 text-sm">{{ $burgerCount }}</span>
+    </button>
+
+    <button onclick="filterCategory('chicken', this)" class="category-btn flex items-center gap-2 px-6 py-3 bg-white text-gray-700 rounded-lg shadow hover:bg-gray-50 transition">
+        Chicken
+        <span class="text-gray-500 text-sm">{{ $chickenCount }}</span>
+    </button>
+
+    <button onclick="filterCategory('drinks', this)" class="category-btn flex items-center gap-2 px-6 py-3 bg-white text-gray-700 rounded-lg shadow hover:bg-gray-50 transition">
+        Drinks
+        <span class="text-gray-500 text-sm">{{ $drinksCount }}</span>
+    </button>
+
+    <button onclick="filterCategory('vegetable', this)" class="category-btn flex items-center gap-2 px-6 py-3 bg-white text-gray-700 rounded-lg shadow hover:bg-gray-50 transition">
+        Vegetable
+        <span class="text-gray-500 text-sm">{{ $vegetableCount }}</span>
+    </button>
+</div>
+
+
+            <br><br>
+
+            <!-- Menu Items Grid -->
+            <div class="mb-8">
+                <div class="grid grid-cols-5 gap-4">
+                     @foreach ($foodsByCategory as $category => $foods)
+                    @foreach ($foods as $food)
+                    <form action="{{ route('cashier.add-to-cart') }}" method="POST" class="menu-item"data-category="{{ strtolower($food->category) }}">
+                         
+                        @csrf
+                         <input type="hidden" name="item_name" value="{{ $food->name }}">
+                         <input type="hidden" name="price" value="{{ $food->price }}">
+                        <button type="submit" class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden w-full text-left">
+                         <img src="{{ asset('images/' . ($food->image ?? 'placeholder.jpg')) }}" class="w-full h-32 object-cover"
+                          alt="{{ $food->name }}">
+
+                            <div class="p-4">
+                                 <h3>{{ $food->name }}</h3>
+                                 <p>₱{{ $food->price }} </p>
+                            </div>
+                        </button>
+                    </form>
+
+                    @endforeach
+                     @endforeach
+
                 </div>
+            </div>  
+        </div>
+    </div>
+    
+    <!-- Right Sidebar (Cart) -->
+    <div class="w-96 bg-white shadow-lg p-6 overflow-auto">
+        <!-- Table Info -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <button class="p-2 bg-cyan-400 text-white rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+                <button class="p-2 bg-purple-400 text-white rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="text-center mb-2">
+                <span class="text-sm text-gray-600">Give Discount</span>
+                <span class="mx-4"></span>
+                <span class="text-sm text-gray-600">Extra Charge</span>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2 text-center mb-4">
+    <div>
+        <p class="text-xs text-gray-500">Table No</p>
+        <p class="font-bold text-lg" id="receipt-table">Tb10</p>
+    </div>
+
+    <div>
+        <p class="text-xs text-gray-500">Place</p>
+        <p class="font-bold text-lg" id="receipt-place">Take Away</p>
+    </div>
+
+    <div class="flex justify-between mb-4">
+    <span class="text-sm text-gray-500">Order No:</span>
+    <span class="font-bold text-lg" id="receipt-order-number">1</span>
+</div>
+
+</div>
+
+        </div>
+
+        <!-- Cart Items -->
+        <div class="mb-6 space-y-4">
+            @if(session('cart') && count(session('cart')) > 0)
+                @foreach(session('cart') as $index => $item)
+                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&h=100&fit=crop" alt="{{ $item['name'] }}" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800">{{  $item['name']  }}</h4>
+                        <p class="text-sm text-gray-600">₱{{ $item['price'] }}</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <form action="{{ route('cashier.decrease-quantity', $index) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="w-6 h-6 bg-gray-200 rounded text-gray-700 hover:bg-gray-300">-</button>
+                            </form>
+                            <span class="font-semibold">{{ $item['quantity'] }}</span>
+                            <form action="{{ route('cashier.increase-quantity', $index) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="w-6 h-6 bg-gray-200 rounded text-gray-700 hover:bg-gray-300">+</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form action="{{ route('cashier.remove-from-cart', $index) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-gray-400 hover:text-red-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                @endforeach
+            @else
+                <div class="text-center py-8 text-gray-400">
+                    <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <p>No items in cart</p>
+                </div>
+            @endif
+        </div>
+
+        <!-- Summary -->
+        <div class="border-t pt-4 space-y-3">
+            <div class="flex justify-between text-gray-600">
+                <span>Total</span>
+                <span class="font-semibold">{{ session('total',0) }}.00</span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+                <span>Discount</span>
+                <span class="font-semibold">00.00</span>
+            </div>
+            
+            <div class="flex justify-between text-xl font-bold text-gray-800 pt-3 border-t">
+                <span>Net Payable</span>
+                <span>{{ session('cart_total', 0) }}</span>
             </div>
         </div>
 
-        <nav class="flex-1 p-4 space-y-2">
-            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-lg transition">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                <span>Order Line</span>
-            </a>
-            <a href="{{ route('tables.index') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                <i data-lucide="utensils-crossed" class="w-5 h-5"></i>
-                <span>Manage Table</span>
-            </a>
-            <a href="{{ route('menu-items.index') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                <i data-lucide="coffee" class="w-5 h-5"></i>
-                <span>Manage Dishes</span>
-            </a>
+        <!-- Actions -->
+        <div class="mt-6 space-y-3">
+            <label class="flex items-center">
+                <input type="checkbox" class="mr-2" checked>
+                <span class="text-sm text-gray-600">Auto Print</span>
+            </label>
             
-        </nav>
+            <form action="{{ route('cashier.create-order') }}" method="POST">
+    @csrf
 
-        <div class="p-4 border-t border-gray-200 space-y-2">
-            
-            <form method="POST" action="{{ route('logout') }}" class="inline w-full">
+    <!-- Hidden inputs for receipt/order -->
+    <input type="hidden" name="order_number" id="order-number" value="{{ session('cart') ? count(session('cart')) + 1 : 1 }}">
+    <input type="hidden" name="place" id="order-place">
+    <input type="hidden" name="table_no" id="order-table">
+
+    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+        Create Order
+    </button>
+</form>
+
+            <form action="{{ route('cashier.clear-cart') }}" method="POST">
                 @csrf
-                <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition text-left">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                    <span>Logout</span>
+                @method('DELETE')
+                <button type="submit" class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+                    Cancel
                 </button>
             </form>
         </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <!-- Header -->
-        <header class="bg-white border-b border-gray-200 px-8 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 max-w-xl">
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                        <input
-                            type="text"
-                            x-model="searchQuery"
-                            placeholder="Search menu, orders and more"
-                            class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                        />
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4 ml-8">
-                    <button class="p-2 hover:bg-gray-100 rounded-lg relative">
-                        <i data-lucide="bell" class="w-5 h-5 text-gray-600"></i>
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
-                    <div class="flex items-center space-x-3">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'User') }}&background=14b8a6&color=fff" alt="User" class="w-10 h-10 rounded-full" />
-                        <div>
-                            <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->name ?? 'User' }}</p>
-                            <p class="text-xs text-gray-500">{{ auth()->user()->role ?? 'Cashier' }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Content Area -->
-        <div class="flex-1 overflow-hidden flex">
-            <!-- Orders and Menu -->
-            <div class="flex-1 overflow-y-auto p-8">
-                <!-- Order Line Section -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Order Line</h2>
-                    <div class="flex space-x-2 mb-6">
-                        <button @click="filterStatus = 'all'" :class="filterStatus === 'all' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-600'" class="px-4 py-2 rounded-full text-sm font-medium">
-                            All <span class="ml-1" :class="filterStatus === 'all' ? 'bg-white text-teal-500' : ''" class="px-2 rounded-full" x-text="orders.length"></span>
-                        </button>
-                        <button @click="filterStatus = 'in_kitchen'" :class="filterStatus === 'in_kitchen' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-600'" class="px-4 py-2 rounded-full text-sm font-medium">
-                            In Kitchen <span class="ml-1" x-text="orders.filter(o => o.status === 'in_kitchen').length"></span>
-                        </button>
-                        <button @click="filterStatus = 'pending'" :class="filterStatus === 'pending' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-600'" class="px-4 py-2 rounded-full text-sm font-medium">
-                            Wait List <span class="ml-1" x-text="orders.filter(o => o.status === 'pending').length"></span>
-                        </button>
-                        <button @click="filterStatus = 'ready'" :class="filterStatus === 'ready' ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-600'" class="px-4 py-2 rounded-full text-sm font-medium">
-                            Ready <span class="ml-1" x-text="orders.filter(o => o.status === 'ready').length"></span>
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-4 mb-8">
-                        <template x-for="order in filteredOrders" :key="order.id">
-                            <div @click="selectOrder(order)" :class="getOrderColorClass(order.status)" class="p-4 rounded-xl cursor-pointer hover:shadow-md transition">
-                                <div class="flex justify-between items-start mb-3">
-                                    <div>
-                                        <p class="text-sm font-semibold text-gray-900" x-text="'Order #' + order.order_number"></p>
-                                        <p class="text-xs text-gray-600" x-text="'Item: ' + order.items.reduce((sum, item) => sum + item.quantity, 0) + 'X'"></p>
-                                    </div>
-                                    <p class="text-sm font-medium text-gray-700" x-text="'Table ' + order.table.table_number"></p>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <p class="text-xs text-gray-600" x-text="getTimeAgo(order.created_at)"></p>
-                                    <span :class="getStatusBadgeClass(order.status)" class="px-3 py-1 rounded-full text-xs font-medium" x-text="getStatusText(order.status)"></span>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <!-- Foodies Menu -->
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Foodies Menu</h2>
-                    <div class="flex space-x-2 mb-6 overflow-x-auto">
-                        <template x-for="cat in categories" :key="cat.id">
-                            <button
-                                @click="selectedCategory = cat.id"
-                                :class="selectedCategory === cat.id ? 'bg-white border-2 border-teal-500 text-gray-900' : 'bg-white border border-gray-200 text-gray-600'"
-                                class="px-6 py-3 rounded-xl text-sm font-medium whitespace-nowrap"
-                            >
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-xl" x-text="cat.icon"></span>
-                                    <div class="text-left">
-                                        <p x-text="cat.name"></p>
-                                        <p class="text-xs text-gray-500" x-text="cat.count + ' Items'"></p>
-                                    </div>
-                                </div>
-                            </button>
-                        </template>
-                    </div>
-
-                    <div class="grid grid-cols-4 gap-4">
-                        <template x-for="item in filteredMenuItems" :key="item.id">
-                            <div class="bg-white border border-gray-200 rounded-xl p-4">
-                                <div class="text-5xl mb-3 text-center">🍽️</div>
-                                <p class="text-xs text-gray-500 mb-1" x-text="item.category"></p>
-                                <p class="text-sm font-semibold text-gray-900 mb-3" x-text="item.name"></p>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-lg font-bold text-gray-900" x-text="'$' + parseFloat(item.price).toFixed(2)"></p>
-                                    <button 
-                                        @click="addItemToOrder(item)"
-                                        class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center hover:bg-teal-600"
-                                    >
-                                        <i data-lucide="plus" class="w-4 h-4 text-white"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Order Summary Sidebar -->
-            <div class="w-96 bg-white border-l border-gray-200 flex flex-col" x-show="currentOrder">
-                <div class="p-6 border-b border-gray-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900" x-text="'Table No #' + (currentOrder?.table?.table_number || 'N/A')"></h3>
-                            <p class="text-sm text-gray-500" x-text="'Order #' + (currentOrder?.order_number || 'N/A')"></p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button @click="editOrder()" class="p-2 hover:bg-gray-100 rounded-lg">
-                                <i data-lucide="edit" class="w-5 h-5 text-gray-600"></i>
-                            </button>
-                            <button @click="deleteOrder()" class="p-2 hover:bg-gray-100 rounded-lg">
-                                <i data-lucide="trash-2" class="w-5 h-5 text-gray-600"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600" x-text="(currentOrder?.number_of_people || 0) + ' People'"></p>
-                </div>
-
-                <div class="flex-1 overflow-y-auto p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h4 class="font-semibold text-gray-900">Ordered Items</h4>
-                        <span class="text-sm text-gray-500" x-text="String(currentOrder?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0).padStart(2, '0')"></span>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <template x-for="item in currentOrder?.items || []" :key="item.id">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-900" x-text="item.quantity + 'x ' + item.menu_item.name"></p>
-                                </div>
-                                <p class="text-sm font-semibold text-gray-900" x-text="'$' + (item.price * item.quantity).toFixed(2)"></p>
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="border-t border-gray-200 pt-4 space-y-3">
-                        <h4 class="font-semibold text-gray-900 mb-4">Payment Summary</h4>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Subtotal</span>
-                            <span class="font-medium text-gray-900" x-text="'$' + parseFloat(currentOrder?.subtotal || 0).toFixed(2)"></span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Tax</span>
-                            <span class="font-medium text-gray-900" x-text="'$' + parseFloat(currentOrder?.tax || 0).toFixed(2)"></span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Donation for Palestine</span>
-                            <span class="font-medium text-gray-900" x-text="'$' + parseFloat(currentOrder?.donation || 0).toFixed(2)"></span>
-                        </div>
-                        <div class="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
-                            <span>Total Payable</span>
-                            <span x-text="'$' + parseFloat(currentOrder?.total || 0).toFixed(2)"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-6 border-t border-gray-200 space-y-4">
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-3">Payment Method</h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button @click="paymentMethod = 'cash'" :class="paymentMethod === 'cash' ? 'bg-teal-50 border-2 border-teal-500 text-teal-600' : 'border border-gray-200'" class="px-4 py-3 rounded-lg text-sm hover:border-teal-500">
-                                💵 Cash
-                            </button>
-                            <button @click="paymentMethod = 'card'" :class="paymentMethod === 'card' ? 'bg-teal-50 border-2 border-teal-500 text-teal-600' : 'border border-gray-200'" class="px-4 py-3 rounded-lg text-sm hover:border-teal-500">
-                                💳 Card
-                            </button>
-                            <button @click="paymentMethod = 'scan'" :class="paymentMethod === 'scan' ? 'bg-teal-50 border-2 border-teal-500 text-teal-600' : 'border border-gray-200'" class="px-4 py-3 rounded-lg text-sm hover:border-teal-500">
-                                📱 Scan
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="flex space-x-2">
-                        <button @click="printOrder()" class="flex-1 px-4 py-3 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50">
-                            🖨️ Print
-                        </button>
-                        <button @click="processPayment()" class="flex-1 px-4 py-3 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600">
-                            🛒 Place Order
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-@push('scripts')
 <script>
-function cashierDashboard() {
-    return {
-        orders: @json($orders),
-        menuItems: @json($menuItems),
-        tables: @json($tables),
-        currentOrder: null,
-        filterStatus: 'all',
-        selectedCategory: 'special',
-        searchQuery: '',
-        paymentMethod: 'card',
-        categories: [
-            { id: 'all', name: 'All Menu', icon: '🍽️', count: 154 },
-            { id: 'special', name: 'Special', icon: '⭐', count: 19 },
-            { id: 'soups', name: 'Soups', icon: '🍲', count: 5 },
-            { id: 'desserts', name: 'Desserts', icon: '🍰', count: 19 },
-            { id: 'chickens', name: 'Chickens', icon: '🍗', count: 10 }
-        ],
+// Category Filter
+function filterCategory(category, button) {
+    const foods = document.querySelectorAll('.menu-item');
+    foods.forEach(food => {
+        food.style.display = (category === 'all' || food.dataset.category === category) ? 'block' : 'none';
+    });
 
-        init() {
-            if (this.orders.length > 0) {
-                this.selectOrder(this.orders[0]);
-            }
-            setTimeout(() => lucide.createIcons(), 100);
-        },
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-purple-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700');
+    });
 
-        get filteredOrders() {
-            if (this.filterStatus === 'all') {
-                return this.orders;
-            }
-            return this.orders.filter(order => order.status === this.filterStatus);
-        },
-
-        get filteredMenuItems() {
-            if (this.selectedCategory === 'all') {
-                return this.menuItems;
-            }
-            return this.menuItems.filter(item => 
-                item.category.toLowerCase() === this.selectedCategory.toLowerCase()
-            );
-        },
-
-        selectOrder(order) {
-            this.currentOrder = order;
-        },
-
-        getOrderColorClass(status) {
-            const colors = {
-                'in_kitchen': 'bg-teal-100',
-                'pending': 'bg-red-100',
-                'ready': 'bg-purple-100',
-                'served': 'bg-green-100'
-            };
-            return colors[status] || 'bg-gray-100';
-        },
-
-        getStatusBadgeClass(status) {
-            const colors = {
-                'in_kitchen': 'bg-teal-500 text-white',
-                'pending': 'bg-orange-500 text-white',
-                'ready': 'bg-purple-500 text-white',
-                'served': 'bg-green-500 text-white'
-            };
-            return colors[status] || 'bg-gray-500 text-white';
-        },
-
-        getStatusText(status) {
-            const texts = {
-                'in_kitchen': 'In Kitchen',
-                'pending': 'Wait List',
-                'ready': 'Ready',
-                'served': 'Served',
-                'paid': 'Paid'
-            };
-            return texts[status] || status;
-        },
-
-        getTimeAgo(date) {
-            const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-            if (seconds < 60) return 'Just Now';
-            const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return minutes + ' mins ago';
-            const hours = Math.floor(minutes / 60);
-            return hours + ' hours ago';
-        },
-
-        addItemToOrder(menuItem) {
-            if (!this.currentOrder) {
-                alert('Please select or create an order first');
-                return;
-            }
-            
-            // Add item logic here
-            console.log('Adding item:', menuItem);
-        },
-
-        async processPayment() {
-            if (!this.currentOrder) return;
-            
-            if (!confirm('Process payment for this order?')) return;
-
-            try {
-                const response = await fetch(`/orders/${this.currentOrder.id}/pay`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        payment_method: this.paymentMethod
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    alert('Payment processed successfully!');
-                    location.reload();
-                } else {
-                    alert('Payment failed: ' + data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to process payment');
-            }
-        },
-
-        printOrder() {
-            if (!this.currentOrder) return;
-            window.open(`/orders/${this.currentOrder.id}/print`, '_blank');
-        },
-
-        async deleteOrder() {
-            if (!this.currentOrder) return;
-            
-            if (!confirm('Are you sure you want to delete this order?')) return;
-
-            try {
-                const response = await fetch(`/orders/${this.currentOrder.id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    alert('Order deleted successfully!');
-                    location.reload();
-                } else {
-                    alert('Failed to delete order: ' + data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to delete order');
-            }
-        },
-
-        editOrder() {
-            alert('Edit functionality coming soon!');
-        }
-    }
+    button.classList.add('bg-purple-600', 'text-white');
+    button.classList.remove('bg-white', 'text-gray-700');
 }
+
+// Place & Table Dynamic Handling
+const placeSelect = document.getElementById('place-select');
+const tableSelect = document.getElementById('table-select');
+const tableContainer = document.getElementById('table-container');
+const orderPlace = document.getElementById('order-place');
+const orderTable = document.getElementById('order-table');
+
+function updateTableVisibility() {
+    if (placeSelect.value === 'Dine In') {
+        tableSelect.parentElement.style.display = 'block'; // show table select
+        orderTable.value = tableSelect.value;            // set hidden input
+    } else {
+        tableSelect.parentElement.style.display = 'none'; // hide table select
+        orderTable.value = '';                             // clear hidden input
+    }
+    orderPlace.value = placeSelect.value;                 // always set hidden input
+}
+
+
+placeSelect.addEventListener('change', updateTableVisibility);
+tableSelect.addEventListener('change', () => orderTable.value = tableSelect.value);
+
+// Initialize on page load
+updateTableVisibility();
+
+// Update receipt dynamically
+const receiptPlace = document.getElementById('receipt-place');
+const receiptTable = document.getElementById('receipt-table');
+
+function updateReceipt() {
+    receiptPlace.textContent = placeSelect.value;
+    receiptTable.textContent = placeSelect.value === 'Dine In' ? tableSelect.value : '-';
+}
+
+// Call it whenever the dropdowns change
+placeSelect.addEventListener('change', () => {
+    updateTableVisibility();
+    updateReceipt();
+});
+
+tableSelect.addEventListener('change', updateReceipt);
+
+// Initialize on page load
+updateReceipt();
+
 </script>
-@endpush
+
+
 @endsection

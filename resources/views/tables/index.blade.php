@@ -24,10 +24,7 @@
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="{{ route('cashier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-lg transition">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                <span>Order Line</span>
-            </a>
+            
             <a href="{{ route('tables.index') }}" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
                 <i data-lucide="utensils-crossed" class="w-5 h-5"></i>
                 <span>Manage Table</span>
