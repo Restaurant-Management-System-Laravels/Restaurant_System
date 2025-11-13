@@ -1,37 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-8 max-w-md mx-auto bg-white rounded shadow">
-    <h2 class="text-xl font-bold mb-4">Order Receipt</h2>
+<div class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Order Receipt</h1>
 
-    <div class="mb-4">
-        <div class="flex justify-between mb-2">
-            <span>Order No:</span>
-            <span class="font-bold">{{ $order->order_number }}</span>
-        </div>
-        <div class="flex justify-between mb-2">
-            <span>Place:</span>
-            <span>{{ $order->place }}</span>
-        </div>
-        @if($order->place === 'Dine In')
-        <div class="flex justify-between mb-2">
-            <span>Table No:</span>
-            <span>{{ $order->table_no }}</span>
-        </div>
-        @endif
-    </div>
+    <p>Order No: {{ $order['order_number'] }}</p>
+    <p>Place: {{ $order['place'] }}</p>
+    <p>Table No: {{ $order['table_no'] ?: '-' }}</p>
 
-    <div class="border-t pt-2">
-        @foreach($order->items as $item)
-        <div class="flex justify-between">
-            <span>{{ $item->item_name }} x {{ $item->quantity }}</span>
-            <span>₱{{ $item->price * $item->quantity }}</span>
-        </div>
-        @endforeach
-        <div class="flex justify-between mt-2 font-bold">
-            <span>Total:</span>
-            <span>₱{{ $order->total }}</span>
-        </div>
-    </div>
+    <table class="w-full mt-4 border">
+        <thead>
+            <tr>
+                <th class="border px-2 py-1">Item</th>
+                <th class="border px-2 py-1">Price</th>
+                <th class="border px-2 py-1">Qty</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($order['items'] as $item)
+            <tr>
+                <td class="border px-2 py-1">{{ $item['name'] }}</td>
+                <td class="border px-2 py-1">₱{{ $item['price'] }}</td>
+                <td class="border px-2 py-1">{{ $item['quantity'] }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <p class="mt-4 font-bold">Total: ₱{{ $order['total'] }}</p>
 </div>
 @endsection

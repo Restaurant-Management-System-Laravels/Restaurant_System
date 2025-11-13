@@ -8,21 +8,38 @@ class Table extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
+      protected $fillable = [
         'table_number',
         'capacity',
-        'status'
+        'status',
+        'notes'
     ];
 
-    public function orders()
+    protected $casts = [
+        'capacity' => 'integer',
+    ];
+
+    // Get status badge color
+    public function getStatusColorAttribute()
     {
-        return $this->hasMany(Order::class);
+        return match($this->status) {
+            'available' => 'success',
+            'occupied' => 'danger',
+            'reserved' => 'warning',
+            'maintenance' => 'secondary',
+            default => 'secondary'
+        };
     }
 
-    public function currentOrder()
+    // Get status icon
+    public function getStatusIconAttribute()
     {
-        return $this->hasOne(Order::class)
-            ->whereIn('status', ['pending', 'in_kitchen', 'ready'])
-            ->latest();
+        return match($this->status) {
+            'available' => '✓',
+            'occupied' => '●',
+            'reserved' => '◷',
+            'maintenance' => '⚠',
+            default => '?'
+        };
     }
 }
