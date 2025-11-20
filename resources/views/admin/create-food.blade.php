@@ -40,8 +40,8 @@
                                 <option value="">Select Category</option>
                                 <option value="Burger" {{ old('category') == 'burger' ? 'selected' : '' }}>Burger</option>
                                 <option value="Chicken" {{ old('category') == 'chicken' ? 'selected' : '' }}>Chicken</option>
-                                <option value="Vegetables" {{ old('category') == 'vegetables' ? 'selected' : '' }}>Vegetables</option>
-                                <option value="DrinkS" {{ old('category') == 'drinks' ? 'selected' : '' }}>Drinks</option>
+                                <option value="Vegetable" {{ old('category') == 'vegetables' ? 'selected' : '' }}>Vegetables</option>
+                                <option value="Drinks" {{ old('category') == 'drinks' ? 'selected' : '' }}>Drinks</option>
                             </select>
                             @error('category')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

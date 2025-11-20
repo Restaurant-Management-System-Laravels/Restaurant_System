@@ -195,6 +195,8 @@ public function orders()
         $request->session()->regenerateToken();
         return redirect('/');
     }
+
+    
 }
 
 

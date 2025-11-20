@@ -518,9 +518,6 @@
                     <i class="fas fa-shopping-cart mr-3"></i>
                     <span>Orders</span>
                 </a>
-            </nav>
-
-            <div class="border-t mt-auto">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="flex items-center w-full px-6 py-3 text-gray-600 hover:bg-gray-100">
@@ -528,7 +525,9 @@
                         <span>Logout</span>
                     </button>
                 </form>
-            </div>
+            </nav>
+
+           
         </aside>
 
         <!-- Main Content -->

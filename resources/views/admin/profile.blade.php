@@ -20,22 +20,13 @@
             </div>
             
             <nav class="mt-6 flex-1">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-chart-line mr-3"></i>
-                    <span>Dashboard</span>
-                </a>
+                
                 <a href="{{ route('admin.foods') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-drumstick-bite mr-3"></i>
                     <span>Foods</span>
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-plus-circle mr-3"></i>
-                    <span>Food Add-Ons</span>
-                </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-book-open mr-3"></i>
-                    <span>Menus</span>
-                </a>
+                
+                
                 <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-table mr-3"></i>
                     <span>Tables</span>

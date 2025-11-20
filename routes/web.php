@@ -1,14 +1,11 @@
 <?php
-
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TableController;
-use App\Http\Controllers\MenuItemController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\HelpController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 // 🏠 Public Route
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', [HomeController::class, 'my_home'])->name('my_home');
+Route::get('/home/dashboard', [HomeController::class, 'dashboard'])->name('home.dashboard');
+
+Route::get('/reservation', [HomeController::class, 'index'])->name('reservation');
+Route::post('/reservation', [HomeController::class, 'store'])->name('reservation.store');
+
+Route::get('/', [HomeController::class, 'my_home']);
+
 
 // 🕓 Waiting for approval page
 Route::view('/pending', 'auth.pending')->name('pending');
@@ -33,14 +36,10 @@ Route::middleware(['auth', 'approved'])->get('/dashboard', function () {
         'admin' => redirect()->route('admin.dashboard'),
         'cashier' => redirect()->route('cashier.dashboard'),
         'kitchen' => redirect()->route('kitchen.dashboard'),
-        default => redirect()->route('user.dashboard'),
-    };
-})->name('dashboard');
+        default => redirect()->route('home.dashboard'),
+    };})->name('dashboard');
 
-// 👤 Customer/User dashboard
-Route::middleware(['auth', 'approved'])->get('/user/dashboard', function () {
-    return view('user.dashboard');
-})->name('user.dashboard');
+
 
 
 
@@ -49,10 +48,17 @@ Route::middleware(['auth', 'approved'])->get('/user/dashboard', function () {
     return view('cashier.dashboard');
     })->name('cashier.dashboard');
 
+
     Route::prefix('cashier')->name('cashier.')->group(function () {
     
     // Main Dashboard
     Route::get('/dashboard', [CashierController::class, 'dashboard'])->name('dashboard');
+    // 🧍 Profile management
+    Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     
     Route::post('/create-order', [CashierController::class, 'createOrder'])->name('create-order');
 
@@ -62,7 +68,15 @@ Route::middleware(['auth', 'approved'])->get('/user/dashboard', function () {
     Route::post('/decrease-quantity/{index}', [CashierController::class, 'decreaseQuantity'])->name('decrease-quantity');
     Route::delete('/remove-from-cart/{index}', [CashierController::class, 'removeFromCart'])->name('remove-from-cart');
     Route::delete('/clear-cart', [CashierController::class, 'clearCart'])->name('clear-cart');
+
+    Route::post('/cashier/apply-discount', [CashierController::class, 'applyDiscount'])->name('cashier.apply-discount');
+    Route::post('/cashier/apply-extra', [CashierController::class, 'applyExtraCharge'])->name('cashier.apply-extra');
+
+    Route::post('/cashier/create-order', [CashierController::class, 'createOrder'])->name('cashier.create-order');
+    Route::get('/cashier/receipt/{id}', [CashierController::class, 'showReceipt'])->name('cashier.receipt');
+
 });
+    });
 
 
 
@@ -129,11 +143,7 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// 🧍 Profile management
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
+
 
 require __DIR__.'/auth.php';

@@ -87,9 +87,11 @@
                         @csrf
                          <input type="hidden" name="item_name" value="{{ $food->name }}">
                          <input type="hidden" name="price" value="{{ $food->price }}">
+                        <input type="hidden" name="image" value="{{ $food->image }}">  <!-- REQUIRED -->
+
                         <button type="submit" class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden w-full text-left">
-                         <img src="{{ asset('images/' . ($food->image ?? 'placeholder.jpg')) }}" class="w-full h-32 object-cover"
-                          alt="{{ $food->name }}">
+                          <img src="{{ asset('storage/' . $food->image) }}" alt="{{ $food->name }}" class="w-full h-32 object-cover">
+                          
 
                             <div class="p-4">
                                  <h3>{{ $food->name }}</h3>
@@ -154,7 +156,7 @@
             @if(session('cart') && count(session('cart')) > 0)
                 @foreach(session('cart') as $index => $item)
                 <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&h=100&fit=crop" alt="{{ $item['name'] }}" class="w-16 h-16 rounded-lg object-cover">
+                     <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}" class="w-16 h-16 rounded-lg object-cover">
                     <div class="flex-1">
                         <h4 class="font-semibold text-gray-800">{{  $item['name']  }}</h4>
                         <p class="text-sm text-gray-600">₱{{ $item['price'] }}</p>
@@ -191,53 +193,87 @@
             @endif
         </div>
 
-        <!-- Summary -->
-        <div class="border-t pt-4 space-y-3">
-            <div class="flex justify-between text-gray-600">
-                <span>Total</span>
-                <span class="font-semibold">{{ session('total',0) }}.00</span>
+        <!-- Discount & Extra Charge Forms -->
+            <div class="mb-4 grid grid-cols-2 gap-2">
+                <form action="{{ route('cashier.apply-discount') }}" method="POST" class="flex gap-2">
+                    @csrf
+                    <input type="number" min="0" step="0.01" name="discount" placeholder="Discount (₱)" value="{{ session('cart_discount', 0) }}" class="w-full px-3 py-2 border rounded">
+                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded">Apply</button>
+                </form>
+
+                <form action="{{ route('cashier.apply-extra') }}" method="POST" class="flex gap-2">
+                    @csrf
+                    <input type="number" min="0" step="0.01" name="extra_charge" placeholder="Extra (₱)" value="{{ session('cart_extra', 0) }}" class="w-full px-3 py-2 border rounded">
+                    <button type="submit" class="px-4 py-2 bg-cyan-600 text-white rounded">Apply</button>
+                </form>
             </div>
-            <div class="flex justify-between text-gray-600">
-                <span>Discount</span>
-                <span class="font-semibold">00.00</span>
-            </div>
-            
-            <div class="flex justify-between text-xl font-bold text-gray-800 pt-3 border-t">
-                <span>Net Payable</span>
-                <span>{{ session('cart_total', 0) }}</span>
-            </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="mt-6 space-y-3">
-            <label class="flex items-center">
-                <input type="checkbox" class="mr-2" checked>
-                <span class="text-sm text-gray-600">Auto Print</span>
-            </label>
-            
-            <form action="{{ route('cashier.create-order') }}" method="POST">
-    @csrf
+       <!-- Summary -->
+<div class="border-t pt-4 space-y-3">
+    <div class="flex justify-between text-gray-600">
+        <span>Subtotal</span>
+        <span class="font-semibold">₱{{ number_format(session('cart_subtotal', 0), 2) }}</span>
+    </div>
 
-    <!-- Hidden inputs for receipt/order -->
-    <input type="hidden" name="order_number" id="order-number" value="{{ session('cart') ? count(session('cart')) + 1 : 1 }}">
-    <input type="hidden" name="place" id="order-place">
-    <input type="hidden" name="table_no" id="order-table">
+    <div class="flex justify-between text-gray-600">
+        <span>Tax (10%)</span>
+        <span class="font-semibold">₱{{ number_format(session('cart_tax', 0), 2) }}</span>
+    </div>
 
-    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
-        Create Order
-    </button>
-</form>
+    <div class="flex justify-between text-gray-600">
+        <span>Extra Charge</span>
+        <span class="font-semibold">₱{{ number_format(session('cart_extra', 0), 2) }}</span>
+    </div>
 
-            <form action="{{ route('cashier.clear-cart') }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
-                    Cancel
-                </button>
-            </form>
-        </div>
+    <div class="flex justify-between text-gray-600">
+        <span>Discount</span>
+        <span class="font-semibold text-red-600">-₱{{ number_format(session('cart_discount', 0), 2) }}</span>
+    </div>
+
+    <div class="flex justify-between text-xl font-bold text-gray-800 pt-3 border-t">
+        <span>Net Payable</span>
+        <span>₱{{ number_format(session('cart_total', 0), 2) }}</span>
     </div>
 </div>
+
+<!-- Actions -->
+<div class="mt-6 space-y-3">
+    <label class="flex items-center">
+        <input type="checkbox" class="mr-2" checked>
+        <span class="text-sm text-gray-600">Auto Print</span>
+    </label>
+
+    <form action="{{ route('cashier.create-order') }}" method="POST">
+        @csrf
+
+        <!-- Hidden inputs for receipt/order -->
+        <input type="hidden" name="order_number" id="order-number" value="{{ session('cart') ? count(session('cart')) + 1 : 1 }}">
+        <input type="hidden" name="place" id="order-place">
+        <input type="hidden" name="table_no" id="order-table">
+
+        <!-- Send discount/extra values to server with order -->
+        <input type="hidden" name="discount" value="{{ session('cart_discount', 0) }}">
+        <input type="hidden" name="extra_charge" value="{{ session('cart_extra', 0) }}">
+        <input type="hidden" name="subtotal" value="{{ session('cart_subtotal', 0) }}">
+        <input type="hidden" name="tax" value="{{ session('cart_tax', 0) }}">
+        <input type="hidden" name="total" value="{{ session('cart_total', 0) }}">
+
+        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+            Create Order
+        </button>
+    </form>
+
+    <form action="{{ route('cashier.clear-cart') }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition">
+            Cancel
+        </button>
+    </form>
+    </div>
+
+    </div>
+
 
 <script>
 // Category Filter
