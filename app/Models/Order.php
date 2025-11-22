@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,55 +11,70 @@ class Order extends Model
 
     protected $fillable = [
         'order_number',
-        'guest_type',
+        'cashier_id',
+        'cashier_name',
         'place',
-        'waiter',
-        'priority',
-        'table_number',
-        'pax',
+        'table_no',
         'subtotal',
         'discount',
-        'tax',
+        'extra_charge',
         'total',
         'status',
-        'user_id',
-        'completed_at',
+        'payment_status'
     ];
 
-  
-
-    public function table()
-    {
-        return $this->belongsTo(Table::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+    /**
+     * Get the items for the order.
+     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public static function generateOrderNumber()
+    /**
+     * Get the cashier that created the order.
+     */
+    public function cashier()
     {
-        $lastOrder = self::whereDate('created_at', today())->latest()->first();
-        $number = $lastOrder ? intval(substr($lastOrder->order_number, 1)) + 1 : 1;
-        return 'F' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return $this->belongsTo(User::class, 'cashier_id');
     }
 
-    public function calculateTotals()
+    /**
+     * Scope a query to only include pending orders.
+     */
+    public function scopePending($query)
     {
-        $this->subtotal = $this->items->sum(function ($item) {
-            return $item->quantity * $item->price;
-        });
-        
-        $this->tax = $this->subtotal * 0.06; // 6% tax
-        $this->donation = 1.00; // Fixed donation
-        $this->total = $this->subtotal + $this->tax + $this->donation;
-        
-        $this->save();
+        return $query->where('status', 'pending');
     }
+
+    /**
+     * Scope a query to only include completed orders.
+     */
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    /**
+     * Scope a query to only include unpaid orders.
+     */
+    public function scopeUnpaid($query)
+    {
+        return $query->where('payment_status', 'unpaid');
+    }
+
+    /**
+     * Scope a query to only include paid orders.
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('payment_status', 'paid');
+    }
+
+    public static function generateOrderNumber()
+{
+    $lastOrder = self::orderBy('id', 'desc')->first();
+    return $lastOrder ? $lastOrder->order_number + 1 : 1;
+}
+
 }

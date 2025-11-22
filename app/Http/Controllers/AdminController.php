@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Storage; 
@@ -25,6 +26,18 @@ class AdminController extends Controller
                             ->get();
         
         return view('admin.approvals', compact('pendingUsers'));
+
+         $todayOrders = Order::whereDate('created_at', today())->count();
+        $pendingOrders = Order::where('status', 'pending')->count();
+        $todayRevenue = Order::whereDate('created_at', today())->sum('total');
+        $totalOrders = Order::count();
+        
+        return view('admin.dashboard', compact(
+            'todayOrders',
+            'pendingOrders',
+            'todayRevenue',
+            'totalOrders'
+        ));
     }
 
     public function approve($id)
@@ -44,44 +57,41 @@ class AdminController extends Controller
         return redirect()->back()->with('status', "{$user->name} has been rejected and removed!");
     }
 
-
-public function orders()
+public function foods(Request $request)
 {
-    $orders = \App\Models\Order::with('items')->latest()->get();
-    return view('admin.orders', compact('orders'));
-}
- public function foods(Request $request)
-    {
-        $query = Food::query();
+    // Filters
+    $query = Food::query();
 
-        // Search filter
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        // Category filter
-        if ($request->filled('category') && $request->category !== 'Select') {
-            $query->where('category', $request->category);
-        }
-
-        // Price range filter
-        if ($request->filled('price_min')) {
-            $query->where('price', '>=', $request->price_min);
-        }
-        if ($request->filled('price_max')) {
-            $query->where('price', '<=', $request->price_max);
-        }
-
-        // Sorting
-        $sortField = $request->get('sort', 'name');
-        $sortDirection = $request->get('direction', 'asc');
-        $query->orderBy($sortField, $sortDirection);
-
-        $foods = $query->paginate(10);
-        $categories = Food::distinct()->pluck('category');
-
-        return view('admin.foods', compact('foods', 'categories'));
+    if ($request->filled('category')) {
+        $query->where('category', $request->category);
     }
+
+    if ($request->filled('price_min')) {
+        $query->where('price', '>=', $request->price_min);
+    }
+
+    if ($request->filled('price_max')) {
+        $query->where('price', '<=', $request->price_max);
+    }
+
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    // Sorting
+    if ($request->filled('sort')) {
+        $query->orderBy($request->sort, $request->direction ?? 'asc');
+    }
+
+    // Pagination
+    $foods = $query->paginate(10);
+
+    // Get unique categories from foods table
+    $categories = Food::select('category')->distinct()->pluck('category');
+
+    return view('admin.foods', compact('foods', 'categories'));
+}
+
 
     public function createFood()
     {
@@ -196,7 +206,56 @@ public function orders()
         return redirect('/');
     }
 
-    
+    public function orders()
+    {
+        $orders = Order::with('items', 'cashier')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+        
+        return view('admin.orders', compact('orders'));
+    }
+
+    public function orderDetails($id)
+    {
+        $order = Order::with('items')->findOrFail($id);
+        
+        return response()->json($order);
+    }
+
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,preparing,ready,completed,cancelled'
+        ]);
+        
+        $order = Order::findOrFail($id);
+        $order->status = $request->status;
+        $order->save();
+        
+        return redirect()->back()->with('success', 'Order status updated successfully');
+    }
+
+    public function updatePaymentStatus(Request $request, $id)
+    {
+        $request->validate([
+            'payment_status' => 'required|in:unpaid,paid'
+        ]);
+        
+        $order = Order::findOrFail($id);
+        $order->payment_status = $request->payment_status;
+        $order->save();
+        
+        return redirect()->back()->with('success', 'Payment status updated successfully');
+    }
+
+    public function deleteOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+        
+        return redirect()->back()->with('success', 'Order deleted successfully');
+    }
+  
 }
 
 

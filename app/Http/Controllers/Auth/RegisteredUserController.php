@@ -29,28 +29,36 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|string|in:admin,cashier,kitchen,customer',
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'role' => 'required|string|in:admin,cashier,kitchen,customer',
+    ]);
 
-        ]);
+    $autoApprovedRoles = ['admin', 'customer'];
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'is_approved' => true,
+    // create user
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role,
+        'is_approved' => in_array($request->role, $autoApprovedRoles),
+    ]);
 
-        ]);
+    event(new Registered($user));
 
-        event(new Registered($user));
-
+    // Auto-login only approved roles
+    if (in_array($user->role, $autoApprovedRoles)) {
         Auth::login($user);
-
         return redirect(RouteServiceProvider::HOME);
     }
+
+    // Cashier & kitchen → show pending page
+    return redirect()->route('pending')
+        ->with('status', 'Your account is waiting for admin approval.');
+}
+
 }

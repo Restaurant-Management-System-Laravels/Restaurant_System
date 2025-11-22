@@ -500,12 +500,10 @@
             </div>
             
             <nav class="mt-6 flex-1">
-                
-                <a href="{{ route('admin.foods') }}" class="flex items-center px-6 py-3 bg-red-50 text-red-500 border-r-4 border-red-500">
+                <a href="{{ route('admin.foods') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-drumstick-bite mr-3"></i>
                     <span>Foods</span>
                 </a>
-               
                 <a href="{{route('admin.tables')}}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-table mr-3"></i>
                     <span>Tables</span>
@@ -514,25 +512,24 @@
                     <i class="fas fa-qrcode mr-3"></i>
                     <span>Approvals</span>
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                <a href="{{route('admin.orders')}}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-shopping-cart mr-3"></i>
                     <span>Orders</span>
                 </a>
-                <form method="POST" action="{{ route('logout') }}">
+                <form action="{{ route('logout') }}" method="POST" class="mt-4">
                     @csrf
-                    <button type="submit" class="flex items-center w-full px-6 py-3 text-gray-600 hover:bg-gray-100">
-                        <i class="fas fa-sign-out-alt mr-3"></i>
-                        <span>Logout</span>
+                    <button type="submit" class="flex items-center w-full px-6 py-3 text-red-600 hover:bg-red-50">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
                     </button>
                 </form>
             </nav>
-
-           
         </aside>
 
         <!-- Main Content -->
         <div class="flex-1">
-            <!-- Header -->
             <header class="bg-white shadow-sm">
                 <div class="flex items-center justify-between px-8 py-4">
                     <div class="flex items-center space-x-2 text-gray-500">
@@ -553,9 +550,7 @@
                 </div>
             </header>
 
-            <!-- Content Area -->
             <main class="p-8">
-                <!-- Success Message -->
                 @if(session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                     {{ session('success') }}
@@ -565,99 +560,93 @@
                 </div>
                 @endif
 
-                <!-- Page Title and Actions -->
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-drumstick-bite text-red-500 text-xl"></i>
                         <h1 class="text-2xl font-semibold text-gray-800">Tables</h1>
                     </div>
                     <div class="flex items-center space-x-3">
-                         <button class="btn btn-primary" onclick="openAddModal()">
-                        ➕ Add New 
-                    </button>
+                        <button class="btn btn-primary" onclick="openAddModal()">
+                            ➕ Add New 
+                        </button>
                     </div>
                 </div>
 
-                
-
-                <!-- Food List Table -->
                 <div class="bg-white rounded-lg shadow-sm">
-                    <!-- Search Bar -->
                     <div class="p-6 border-b">
                         <form method="GET" action="{{ route('admin.tables') }}">
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Name" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="text" id="searchInput" name="search" value="{{ request('search') }}" placeholder="Search Name" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
                             </div>
                         </form>
                     </div>
 
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card available">
-                    <div class="stat-label">Available</div>
-                    <div class="stat-value" id="statAvailable">{{ $tables->where('status', 'available')->count() }}</div>
-                </div>
-                <div class="stat-card occupied">
-                    <div class="stat-label">Occupied</div>
-                    <div class="stat-value" id="statOccupied">{{ $tables->where('status', 'occupied')->count() }}</div>
-                </div>
-                <div class="stat-card reserved">
-                    <div class="stat-label">Reserved</div>
-                    <div class="stat-value" id="statReserved">{{ $tables->where('status', 'reserved')->count() }}</div>
-                </div>
-                <div class="stat-card maintenance">
-                    <div class="stat-label">Maintenance</div>
-                    <div class="stat-value" id="statMaintenance">{{ $tables->where('status', 'maintenance')->count() }}</div>
-                </div>
-            </div>
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card available">
+                            <div class="stat-label">Available</div>
+                            <div class="stat-value" id="statAvailable">{{ $tables->where('status', 'available')->count() }}</div>
+                        </div>
+                        <div class="stat-card occupied">
+                            <div class="stat-label">Occupied</div>
+                            <div class="stat-value" id="statOccupied">{{ $tables->where('status', 'occupied')->count() }}</div>
+                        </div>
+                        <div class="stat-card reserved">
+                            <div class="stat-label">Reserved</div>
+                            <div class="stat-value" id="statReserved">{{ $tables->where('status', 'reserved')->count() }}</div>
+                        </div>
+                        <div class="stat-card maintenance">
+                            <div class="stat-label">Maintenance</div>
+                            <div class="stat-value" id="statMaintenance">{{ $tables->where('status', 'maintenance')->count() }}</div>
+                        </div>
+                    </div>
 
-            
-            <!-- Tables Grid -->
-            <div class="tables-grid" id="tablesGrid">
-                @forelse($tables as $table)
-                <div class="table-card" data-table-id="{{ $table->id }}" data-search="{{ strtolower($table->table_number . ' ' . $table->location) }}">
-                    <div class="table-header">
-                        <div class="table-number">{{ $table->table_number }}</div>
-                        <span class="status-badge {{ $table->status }}">
-                            {{ $table->status_icon }} {{ ucfirst($table->status) }}
-                        </span>
-                    </div>
-                    <div class="table-info">
-                        <div class="info-row">
-                            <span>👥</span>
-                            <span>Capacity: {{ $table->capacity }} persons</span>
+                    <!-- Tables Grid -->
+                    <div class="tables-grid" id="tablesGrid">
+                        @forelse($tables as $table)
+                        <div class="table-card" data-table-id="{{ $table->id }}" data-search="{{ strtolower($table->table_number . ' ' . $table->location) }}">
+                            <div class="table-header">
+                                <div class="table-number">{{ $table->table_number }}</div>
+                                <span class="status-badge {{ $table->status }}">
+                                    {{ $table->status_icon }} {{ ucfirst($table->status) }}
+                                </span>
+                            </div>
+                            <div class="table-info">
+                                <div class="info-row">
+                                    <span>👥</span>
+                                    <span>Capacity: {{ $table->capacity }} persons</span>
+                                </div>
+                                @if($table->notes)
+                                <div class="info-row">
+                                    <span>📝</span>
+                                    <span>{{ Str::limit($table->notes, 50) }}</span>
+                                </div>
+                                @endif
+                            </div>
+                            <div class="table-actions">
+                                <button class="action-btn btn-success" onclick="quickStatusChange({{ $table->id }}, '{{ $table->status }}')">
+                                    Change Status
+                                </button>
+                                <button class="action-btn btn-warning" onclick="editTable({{ $table->id }})">
+                                    ✏️ Edit
+                                </button>
+                                <button class="action-btn btn-danger" onclick="deleteTable({{ $table->id }})">
+                                    🗑️ Delete
+                                </button>
+                            </div>
                         </div>
-                        
-                        @if($table->notes)
-                        <div class="info-row">
-                            <span>📝</span>
-                            <span>{{ Str::limit($table->notes, 50) }}</span>
+                        @empty
+                        <div class="empty-state" style="grid-column: 1/-1;">
+                            <div class="empty-state-icon">🪑</div>
+                            <h3>No Tables Yet</h3>
+                            <p>Start by adding your first table</p>
                         </div>
-                        @endif
-                    </div>
-                    <div class="table-actions">
-                        <button class="action-btn btn-success" onclick="quickStatusChange({{ $table->id }}, '{{ $table->status }}')">
-                            Change Status
-                        </button>
-                        <button class="action-btn btn-warning" onclick="editTable({{ $table->id }})">
-                            ✏️ Edit
-                        </button>
-                        <button class="action-btn btn-danger" onclick="deleteTable({{ $table->id }})">
-                            🗑️ Delete
-                        </button>
+                        @endforelse
                     </div>
                 </div>
-                @empty
-                <div class="empty-state" style="grid-column: 1/-1;">
-                    <div class="empty-state-icon">🪑</div>
-                    <h3>No Tables Yet</h3>
-                    <p>Start by adding your first table</p>
-                    
-                </div>
-                @endforelse
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- Add/Edit Table Modal -->
@@ -693,6 +682,12 @@
                     <div class="error-message" id="errorStatus"></div>
                 </div>
 
+                <!-- ✅ Added Location field -->
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="tableLocation" placeholder="e.g., Main Hall, VIP Room">
+                    <div class="error-message" id="errorLocation"></div>
+                </div>
 
                 <div class="form-group">
                     <label>Notes</label>
@@ -706,45 +701,11 @@
                 </div>
             </form>
         </div>
-        
     </div>
 
     <script>
-        // CSRF Token Setup
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-        // Filter tables
-        function filterTables() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const tableCards = document.querySelectorAll('.table-card');
-            
-            tableCards.forEach(card => {
-                const searchData = card.getAttribute('data-search');
-                if (searchData.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Show alert message
-        function showAlert(message, type = 'success') {
-            const alertContainer = document.getElementById('alertContainer');
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-            
-            alertContainer.innerHTML = `
-                <div class="alert ${alertClass} show">
-                    ${message}
-                </div>
-            `;
-            
-            setTimeout(() => {
-                alertContainer.innerHTML = '';
-            }, 3000);
-        }
-
-        // Open add modal
         function openAddModal() {
             document.getElementById('modalTitle').textContent = 'Add New Table';
             document.getElementById('tableForm').reset();
@@ -753,29 +714,21 @@
             document.getElementById('tableModal').classList.add('active');
         }
 
-        // Close modal
         function closeTableModal() {
             document.getElementById('tableModal').classList.remove('active');
             clearErrors();
         }
 
-        // Clear error messages
         function clearErrors() {
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
         }
 
-        // Edit table
         async function editTable(tableId) {
             try {
                 const response = await fetch(`/admin/tables/${tableId}`, {
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
                 });
-                
                 const data = await response.json();
-                
                 if (data.success) {
                     document.getElementById('modalTitle').textContent = 'Edit Table';
                     document.getElementById('tableId').value = data.table.id;
@@ -784,27 +737,23 @@
                     document.getElementById('tableStatus').value = data.table.status;
                     document.getElementById('tableLocation').value = data.table.location || '';
                     document.getElementById('tableNotes').value = data.table.notes || '';
-                    
                     clearErrors();
                     document.getElementById('tableModal').classList.add('active');
                 } else {
-                    showAlert('Failed to load table data', 'error');
+                    alert('Failed to load table data');
                 }
             } catch (error) {
-                showAlert('Error loading table data', 'error');
-                console.error('Error:', error);
+                alert('Error loading table data');
+                console.error(error);
             }
         }
 
-        // Save table (create or update)
         async function saveTable(event) {
             event.preventDefault();
             clearErrors();
-            
             const tableId = document.getElementById('tableId').value;
             const url = tableId ? `/admin/tables/${tableId}` : '/admin/tables';
             const method = tableId ? 'PUT' : 'POST';
-            
             const formData = {
                 table_number: document.getElementById('tableNumber').value,
                 capacity: document.getElementById('tableCapacity').value,
@@ -812,118 +761,23 @@
                 location: document.getElementById('tableLocation').value,
                 notes: document.getElementById('tableNotes').value
             };
-            
             try {
                 const response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
+                    method,
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-                
                 const data = await response.json();
-                
                 if (data.success) {
-                    showAlert(data.message, 'success');
-                    closeTableModal();
                     location.reload();
-                } else {
-                    // Show validation errors
-                    if (data.errors) {
-                        Object.keys(data.errors).forEach(key => {
-                            const errorElement = document.getElementById(`error${key.charAt(0).toUpperCase() + key.slice(1).replace('_', '')}`);
-                            if (errorElement) {
-                                errorElement.textContent = data.errors[key][0];
-                            }
-                        });
-                    }
-                    showAlert('Please check the form for errors', 'error');
+                } else if (data.errors) {
+                    Object.keys(data.errors).forEach(key => {
+                        const el = document.getElementById(`error${key.charAt(0).toUpperCase() + key.slice(1).replace('_','')}`);
+                        if (el) el.textContent = data.errors[key][0];
+                    });
                 }
             } catch (error) {
-                showAlert('Error saving table', 'error');
-                console.error('Error:', error);
-            }
-        }
-
-        // Delete table
-        async function deleteTable(tableId) {
-            if (!confirm('Are you sure you want to delete this table? This action cannot be undone.')) {
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/admin/tables/${tableId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showAlert(data.message, 'success');
-                    location.reload();
-                } else {
-                    showAlert('Failed to delete table', 'error');
-                }
-            } catch (error) {
-                showAlert('Error deleting table', 'error');
-                console.error('Error:', error);
-            }
-        }
-
-        // Quick status change
-        async function quickStatusChange(tableId, currentStatus) {
-            const statuses = ['available', 'occupied', 'reserved', 'maintenance'];
-            const statusLabels = {
-                'available': '✓ Available',
-                'occupied': '● Occupied',
-                'reserved': '◷ Reserved',
-                'maintenance': '⚠ Maintenance'
-            };
-            
-            let options = statuses.map(status => 
-                `<option value="${status}" ${status === currentStatus ? 'selected' : ''}>${statusLabels[status]}</option>`
-            ).join('');
-            
-            const newStatus = prompt(`Change table status:\n\nCurrent: ${statusLabels[currentStatus]}\n\nEnter new status (available/occupied/reserved/maintenance):`, currentStatus);
-            
-            if (!newStatus || newStatus === currentStatus) {
-                return;
-            }
-            
-            if (!statuses.includes(newStatus)) {
-                showAlert('Invalid status. Use: available, occupied, reserved, or maintenance', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/admin/tables/${tableId}/status`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showAlert(data.message, 'success');
-                    location.reload();
-                } else {
-                    showAlert('Failed to update status', 'error');
-                }
-            } catch (error) {
-                showAlert('Error updating status', 'error');
-                console.error('Error:', error);
+                console.error(error);
             }
         }
     </script>

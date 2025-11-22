@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - OrderNow!</title>
+    <title>Profile - Resta!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -15,7 +15,7 @@
             <div class="p-6">
                 <div class="flex items-center space-x-2 text-red-500 text-xl font-bold">
                     <i class="fas fa-utensils"></i>
-                    <span>OrderNow!</span>
+                    <span>Resta!</span>
                 </div>
             </div>
             
@@ -26,8 +26,7 @@
                     <span>Foods</span>
                 </a>
                 
-                
-                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                <a href="{{route('admin.tables')}}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-table mr-3"></i>
                     <span>Tables</span>
                 </a>
@@ -35,21 +34,23 @@
                     <i class="fas fa-qrcode mr-3"></i>
                     <span>Approvals</span>
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                <a href="{{route('admin.orders')}}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                     <i class="fas fa-shopping-cart mr-3"></i>
                     <span>Orders</span>
                 </a>
-            </nav>
 
-            <div class="border-t mt-auto">
-                <form method="POST" action="{{ route('logout') }}">
+                <form action="{{ route('logout') }}" method="POST" class="mt-4">
                     @csrf
-                    <button type="submit" class="flex items-center w-full px-6 py-3 text-gray-600 hover:bg-gray-100">
-                        <i class="fas fa-sign-out-alt mr-3"></i>
-                        <span>Logout</span>
+                    <button type="submit" class="flex items-center w-full px-6 py-3 text-red-600 hover:bg-red-50">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
                     </button>
                 </form>
-            </div>
+            </nav>
+
+           
         </aside>
 
         <!-- Main Content -->
